@@ -9,6 +9,7 @@
  */
 int date_format;
 int interval_length;
+char *http_charset = NULL;
 char *illegal_output_chars;
 char illegal_output_char_map[] = CHAR_MAP_INIT(0);
 time_t program_start = 0L;

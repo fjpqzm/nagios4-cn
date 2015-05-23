@@ -194,6 +194,9 @@ void reset_cgi_vars(void) {
 	host_down_sound = NULL;
 	host_unreachable_sound = NULL;
 	normal_sound = NULL;
+	
+	my_free(http_charset);
+	http_charset = strdup(DEFAULT_HTTP_CHARSET);
 
 	statusmap_background_image = NULL;
 	color_transparency_index_r = 255;
@@ -416,6 +419,9 @@ int read_cgi_config_file(const char *filename) {
 
 		else if(!strcmp(var, "illegal_macro_output_chars"))
 			illegal_output_chars = strdup(val);
+		
+		else if(!strcmp(var, "http_charset"))
+			http_charset = strdup(val);
 
 		else if(!strcmp(var, "notes_url_target"))
 			notes_url_target = strdup(val);

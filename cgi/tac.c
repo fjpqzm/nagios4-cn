@@ -50,6 +50,8 @@ extern char   url_images_path[MAX_FILENAME_LENGTH];
 extern char   url_stylesheets_path[MAX_FILENAME_LENGTH];
 extern char   url_media_path[MAX_FILENAME_LENGTH];
 
+extern char *http_charset;
+
 extern int    refresh_rate;
 
 extern char *service_critical_sound;
@@ -281,7 +283,7 @@ void document_header(int use_stylesheet) {
 	get_time_string(&expire_time, date_time, (int)sizeof(date_time), HTTP_DATE_TIME);
 	printf("Expires: %s\r\n", date_time);
 
-	printf("Content-type: text/html\r\n\r\n");
+	printf("Content-type: text/html; charset=\"%s\"\r\n\r\n", http_charset);
 
 	if(embedded == TRUE)
 		return;

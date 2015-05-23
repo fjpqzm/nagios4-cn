@@ -38,6 +38,8 @@ extern char command_file[MAX_FILENAME_LENGTH];
 
 extern char url_stylesheets_path[MAX_FILENAME_LENGTH];
 
+extern char *http_charset;
+
 extern int  nagios_process_state;
 
 extern int  use_authentication;
@@ -245,7 +247,7 @@ void document_header(int use_stylesheet) {
 
 	if(content_type == WML_CONTENT) {
 
-		printf("Content-type: text/vnd.wap.wml\r\n\r\n");
+		printf("Content-type: text/vnd.wap.wml; charset=\"%s\"\r\n\r\n", http_charset);
 
 		printf("<?xml version=\"1.0\"?>\n");
 		printf("<!DOCTYPE wml PUBLIC \"-//WAPFORUM//DTD WML 1.1//EN\" \"http://www.wapforum.org/DTD/wml_1.1.xml\">\n");
@@ -257,7 +259,7 @@ void document_header(int use_stylesheet) {
 
 	else {
 
-		printf("Content-type: text/html\r\n\r\n");
+		printf("Content-type: text/html; charset=\"%s\"\r\n\r\n", http_charset);
 
 		printf("<html>\n");
 		printf("<head>\n");

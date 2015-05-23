@@ -711,6 +711,7 @@ typedef struct hostdependency {
 	struct timeperiod *dependency_period_ptr;
 	} hostdependency;
 
+extern char *http_charset;
 extern struct command *command_list;
 extern struct timeperiod *timeperiod_list;
 extern struct host *host_list;

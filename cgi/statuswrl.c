@@ -40,6 +40,8 @@ extern char url_images_path[MAX_FILENAME_LENGTH];
 extern char url_logo_images_path[MAX_FILENAME_LENGTH];
 extern char *status_file;
 
+extern char *http_charset;
+
 extern char *statuswrl_include;
 
 extern int default_statuswrl_layout_method;
@@ -201,7 +203,7 @@ void document_header(void) {
 	get_time_string(&expire_time, date_time, sizeof(date_time), HTTP_DATE_TIME);
 	printf("Expires: %s\r\n", date_time);
 
-	printf("Content-Type: x-world/x-vrml\r\n\r\n");
+	printf("Content-Type: x-world/x-vrml; charset=\"%s\"\r\n\r\n", http_charset);
 
 	return;
 	}

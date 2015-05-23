@@ -411,7 +411,9 @@ NAGIOS_BEGIN_DECL
 #define LIFO_ERROR_DATA		3
 
 
+/************************** HTTP CHARSET ****************************/
 
+#define DEFAULT_HTTP_CHARSET "utf-8"
 
 
 /*************************** DATA STRUCTURES  *****************************/

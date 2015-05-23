@@ -34,6 +34,8 @@ extern int              refresh_rate;
 extern hoststatus *hoststatus_list;
 extern servicestatus *servicestatus_list;
 
+extern char *http_charset;
+
 extern char main_config_file[MAX_FILENAME_LENGTH];
 extern char url_html_path[MAX_FILENAME_LENGTH];
 extern char url_stylesheets_path[MAX_FILENAME_LENGTH];
@@ -171,7 +173,7 @@ void document_header(int use_stylesheet) {
 	get_time_string(&expire_time, date_time, (int)sizeof(date_time), HTTP_DATE_TIME);
 	printf("Expires: %s\r\n", date_time);
 
-	printf("Content-type: text/html\r\n\r\n");
+	printf("Content-type: text/html; charset=\"%s\"\r\n\r\n", http_charset);
 
 	if(embedded == TRUE)
 		return;

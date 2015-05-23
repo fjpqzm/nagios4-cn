@@ -39,6 +39,8 @@ extern int      nagios_process_state;
 
 extern char     *ping_syntax;
 
+extern char		*http_charset;
+
 #define DISPLAY_HOST		        0
 #define DISPLAY_SERVICE                 1
 #define DISPLAY_HOSTGROUP               2
@@ -198,7 +200,7 @@ void document_header(void) {
 	get_time_string(&expire_time, date_time, (int)sizeof(date_time), HTTP_DATE_TIME);
 	printf("Expires: %s\r\n", date_time);
 
-	printf("Content-type: text/vnd.wap.wml\r\n\r\n");
+	printf("Content-type: text/vnd.wap.wml; charset=\"%s\"\r\n\r\n", http_charset);
 
 	printf("<?xml version=\"1.0\"?>\n");
 	printf("<!DOCTYPE wml PUBLIC \"-//WAPFORUM//DTD WML 1.1//EN\" \"http://www.wapforum.org/DTD/wml_1.1.xml\">\n");

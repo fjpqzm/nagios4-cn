@@ -43,6 +43,8 @@ extern char url_stylesheets_path[MAX_FILENAME_LENGTH];
 extern char physical_images_path[MAX_FILENAME_LENGTH];
 extern char *status_file;
 
+extern char *http_charset;
+
 extern int     log_rotation_method;
 
 /* archived state types */
@@ -1186,7 +1188,7 @@ void document_header(int use_stylesheet) {
 		get_time_string(&expire_time, date_time, sizeof(date_time), HTTP_DATE_TIME);
 		printf("Expires: %s\r\n", date_time);
 
-		printf("Content-type: text/html\r\n\r\n");
+		printf("Content-type: text/html; charset=\"%s\"\r\n\r\n", http_charset);
 
 		if(embedded == TRUE)
 			return;

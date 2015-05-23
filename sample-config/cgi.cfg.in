@@ -36,6 +36,13 @@ url_html_path=@htmurl@
 
 
 
+# HTTP CHARSET
+# This defines charset that is sent with HTTP headers.
+
+http_charset=utf-8
+
+
+
 # CONTEXT-SENSITIVE HELP
 # This option determines whether or not a context-sensitive
 # help icon will be displayed for most of the CGIs.
