@@ -53,21 +53,21 @@ const string_value_mapping svm_au_states[] = {
 	{ "down", AU_STATE_HOST_DOWN, "How Down" },
 	{ "unreachable", AU_STATE_HOST_UNREACHABLE, "Host Unreachable" },
 	{ "ok", AU_STATE_SERVICE_OK, "Service OK" },
-	{ "warning", AU_STATE_SERVICE_WARNING, "Service Warning" },
-	{ "critical", AU_STATE_SERVICE_CRITICAL, "Service Critical" },
-	{ "unknown", AU_STATE_SERVICE_UNKNOWN, "Service Unknown" },
+	{ "warning", AU_STATE_SERVICE_WARNING, "服务警告" },
+	{ "critical", AU_STATE_SERVICE_CRITICAL, "服务紧急" },
+	{ "unknown", AU_STATE_SERVICE_UNKNOWN, "服务未知" },
 	{ "programstart", AU_STATE_PROGRAM_START, "Program Start"},
 	{ "programend", AU_STATE_PROGRAM_END, "Program End"},
 	{ "downtimestart", AU_STATE_DOWNTIME_START, "Downtime Start"},
 	{ "downtimeend", AU_STATE_DOWNTIME_END, "Downtime End"},
-	{ "currentstate", AU_STATE_CURRENT_STATE, "Current State"},
+	{ "currentstate", AU_STATE_CURRENT_STATE, "当前状态"},
 	{ NULL, -1, NULL },
 	};
 
 const string_value_mapping svm_au_log_types[] = {
 	{ "alert", AU_LOGTYPE_ALERT, "Alert" },
 	{ "initialstate", AU_LOGTYPE_STATE_INITIAL, "Initial State" },
-	{ "currentstate", AU_LOGTYPE_STATE_CURRENT, "Current State" },
+	{ "currentstate", AU_LOGTYPE_STATE_CURRENT, "当前状态" },
 	{ "notification", AU_LOGTYPE_NOTIFICATION, "Notification" },
 	{ "downtime", AU_LOGTYPE_DOWNTIME, "Downtime" },
 	{ "nagios", AU_LOGTYPE_NAGIOS, "Nagios" },
@@ -92,9 +92,9 @@ const string_value_mapping svm_au_notification_types[] = {
 	{ "hostflapstop", AU_NOTIFICATION_HOST_FLAPPING_STOP, 
 			"Host Flapping Stop" },
 	{ "critical", AU_NOTIFICATION_SERVICE_CRITICAL, 
-			"Service Critical" },
+			"服务紧急" },
 	{ "warning", AU_NOTIFICATION_SERVICE_WARNING, 
-			"Service Warning" },
+			"服务警告" },
 	{ "recovery", AU_NOTIFICATION_SERVICE_RECOVERY, 
 			"Service Recovery" },
 	{ "custom", AU_NOTIFICATION_SERVICE_CUSTOM, 
@@ -106,7 +106,7 @@ const string_value_mapping svm_au_notification_types[] = {
 	{ "serviceflapstop", AU_NOTIFICATION_SERVICE_FLAPPING_STOP, 
 			"Service Flapping Stop" },
 	{ "unknown", AU_NOTIFICATION_SERVICE_UNKNOWN, 
-			"Service Unknown" },
+			"服务未知" },
 	{ NULL, -1, NULL },
 	};
 
@@ -256,14 +256,14 @@ int read_archived_data(time_t start_time, time_t end_time,
 			current_archive++) {
 
 #ifdef DEBUG
-		printf("Reading archive #%d... ", current_archive);
+		printf("读取存档 #%d... ", current_archive);
 #endif
 
 		/* get the name of the log file that contains this archive */
 		get_log_archive_to_use(current_archive, filename, sizeof(filename) - 1);
 
 #ifdef DEBUG
-		printf("Archive name: '%s'\n", filename);
+		printf("存档名: '%s'\n", filename);
 #endif
 
 		/* Record the last modification time of the the archive file */

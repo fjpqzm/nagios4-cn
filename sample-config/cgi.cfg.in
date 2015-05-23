@@ -230,6 +230,8 @@ authorized_for_all_host_commands=nagiosadmin
 #       3 = Balanced tree
 #       4 = Circular
 #       5 = Circular (Marked Up)
+#       6 = Circular (Balloon)
+#       7 = GoogleMap
 
 default_statusmap_layout=5
 
@@ -377,3 +379,12 @@ lock_author_names=1
 
 navbar_search_for_addresses=1
 navbar_search_for_aliases=1
+
+
+
+
+# TRUE TYPE FONT FILE
+# The font file used for the text of the image outputted by GD
+# is specified. The path of the file to specify is absolutely
+# performed by specification.
+ttf_file=@sbindir@/simhei.ttf

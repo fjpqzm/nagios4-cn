@@ -121,9 +121,9 @@ const string_value_mapping valid_states[] = {
 	{ "host_down", AU_STATE_HOST_DOWN, "Host Down" },
 	{ "host_unreachable", AU_STATE_HOST_UNREACHABLE, "Host Unreachable" },
 	{ "service_ok", AU_STATE_SERVICE_OK, "Service OK" },
-	{ "service_warning", AU_STATE_SERVICE_WARNING, "Service Warning" },
-	{ "service_critical", AU_STATE_SERVICE_CRITICAL, "Service Critical" },
-	{ "service_unknown", AU_STATE_SERVICE_UNKNOWN, "Service Unknown" },
+	{ "service_warning", AU_STATE_SERVICE_WARNING, "服务警告" },
+	{ "service_critical", AU_STATE_SERVICE_CRITICAL, "服务紧急" },
+	{ "service_unknown", AU_STATE_SERVICE_UNKNOWN, "服务未知" },
 	{ "program_start", AU_STATE_PROGRAM_START, "Program Start" },
 	{ "program_end", AU_STATE_PROGRAM_END, "Program End" },
 	{ "downtime_start", AU_STATE_DOWNTIME_START, "Downtime Start" },
@@ -141,7 +141,7 @@ const string_value_mapping valid_initial_host_states[] = {
 	{ "up", AU_STATE_HOST_UP, "Up" },
 	{ "down", AU_STATE_HOST_DOWN, "Down" },
 	{ "unreachable", AU_STATE_HOST_UNREACHABLE, "Unreachable" },
-	{ "current", AU_STATE_CURRENT_STATE, "Current State" },
+	{ "current", AU_STATE_CURRENT_STATE, "当前状态" },
 	{ NULL, -1, NULL },
 	};
 
@@ -158,7 +158,7 @@ const string_value_mapping valid_initial_service_states[] = {
 	{ "warning", AU_STATE_SERVICE_WARNING, "Warning" },
 	{ "critical", AU_STATE_SERVICE_CRITICAL, "Critical" },
 	{ "unknown", AU_STATE_SERVICE_UNKNOWN, "Unknown" },
-	{ "current", AU_STATE_CURRENT_STATE, "Current State" },
+	{ "current", AU_STATE_CURRENT_STATE, "当前状态" },
 	{ NULL, -1, NULL },
 	};
 
@@ -186,9 +186,9 @@ const string_value_mapping valid_service_notification_types[] = {
 	{ "nodata", AU_NOTIFICATION_NO_DATA, 
 			"No Data" },
 	{ "critical", AU_NOTIFICATION_SERVICE_CRITICAL, 
-			"Service Critical" },
+			"服务紧急" },
 	{ "warning", AU_NOTIFICATION_SERVICE_WARNING, 
-			"Service Warning" },
+			"服务警告" },
 	{ "recovery", AU_NOTIFICATION_SERVICE_RECOVERY, 
 			"Service Recovery" },
 	{ "custom", AU_NOTIFICATION_SERVICE_CUSTOM, 
@@ -200,7 +200,7 @@ const string_value_mapping valid_service_notification_types[] = {
 	{ "serviceflapstop", AU_NOTIFICATION_SERVICE_FLAPPING_STOP, 
 			"Service Flapping Stop" },
 	{ "unknown", AU_NOTIFICATION_SERVICE_UNKNOWN, 
-			"Service Unknown" },
+			"服务未知" },
 	{ NULL, -1, NULL },
 	};
 
@@ -466,7 +466,7 @@ option_help archive_json_help[] = {
 		},
 	{ 
 		"assumestateretention",
-		"Assume State Retention",
+		"假定持续状态",
 		"boolean",
 		{ NULL },
 		{ "availability", NULL },
@@ -647,7 +647,7 @@ int main(void) {
 				svm_get_string_from_value(cgi_data.query, valid_queries), 
 				get_query_status(query_status, cgi_data.query),
 				(time_t)-1, NULL, RESULT_FILE_OPEN_READ_ERROR,
-				"Error: Could not open CGI configuration file '%s' for reading!", 
+				"错误: CGI配置文件'%s'无法打开!", 
 				get_cgi_config_location()));
 		json_object_append_object(json_root, "data", 
 				json_help(archive_json_help));
@@ -665,7 +665,7 @@ int main(void) {
 				svm_get_string_from_value(cgi_data.query, valid_queries), 
 				get_query_status(query_status, cgi_data.query),
 				(time_t)-1, NULL, RESULT_FILE_OPEN_READ_ERROR,
-				"Error: Could not open main configuration file '%s' for reading!",
+				"错误: 主配置文件'%s'无法打开!",
 				main_config_file));
 		json_object_append_object(json_root, "data", 
 				json_help(archive_json_help));
@@ -704,7 +704,7 @@ int main(void) {
 				svm_get_string_from_value(cgi_data.query, valid_queries), 
 				get_query_status(query_status, cgi_data.query),
 				(time_t)-1, NULL, RESULT_FILE_OPEN_READ_ERROR,
-				"Error: Could not read some or all object configuration data!"));
+				"错误: 无法读取部分或者全部对象配置数据!"));
 		json_object_append_object(json_root, "data", 
 				json_help(archive_json_help));
 		document_footer();
@@ -719,7 +719,7 @@ int main(void) {
 				svm_get_string_from_value(cgi_data.query, valid_queries), 
 				get_query_status(query_status, cgi_data.query),
 				(time_t)-1, NULL, RESULT_FILE_OPEN_READ_ERROR,
-				"Error: Could not read host and service status information!"));
+				"错误: 无法获得到主机和服务的状态信息!"));
 		json_object_append_object(json_root, "data", 
 				json_help(archive_json_help));
 
@@ -3434,7 +3434,7 @@ unsigned long calculate_window_duration(time_t start_time, time_t end_time,
 					temp_timerange != NULL; 
 					temp_timerange = temp_timerange->next) {
 #ifdef DEBUG
-				printf("Matching in timerange[%d]: %lu -> %lu (%lu -> %lu)\n", 
+				printf("匹配时间范围[%d]: %lu -> %lu (%lu -> %lu)\n", 
 						weekday, temp_timerange->range_start, 
 						temp_timerange->range_end, temp_start, temp_end);
 #endif
@@ -3445,13 +3445,13 @@ unsigned long calculate_window_duration(time_t start_time, time_t end_time,
 				if(start < end) {
 					temp_duration += end - start;
 #ifdef DEBUG
-					printf("Matched time: %ld -> %ld = %lu\n", start, end, 
+					printf("匹配时间: %ld -> %ld = %lu\n", start, end, 
 							temp_duration);
 #endif
 					}
 #ifdef DEBUG
 				else {
-					printf("Ignored time: %ld -> %ld\n", start, end);
+					printf("忽略时间: %ld -> %ld\n", start, end);
 					}
 #endif
 				}

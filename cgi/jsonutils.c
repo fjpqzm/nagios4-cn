@@ -38,39 +38,32 @@
 #define BUF_REALLOC_MULTIPLIER 16
 
 const char *result_types[] = {
-	"Success",
-	"Unable to Allocate Memory",
-	"Unable to Open File for Reading",
-	"Option Invalid",
-	"Option Missing",
-	"Option Value Missing",
-	"Option Value Invalid",
-	"Option Ignored"
+	"成功",
+	"不能分配内存",
+	"不能打开文件",
+	"选项错误",
+	"选项丢失",
+	"选项值丢失",
+	"选项值错误",
+	"选项忽略"
 	};
 
 const string_value_mapping svm_format_options[] = {
 	{ "whitespace", JSON_FORMAT_WHITESPACE, 
-		"Pad with whitespace to increase readability" },
+		"垫空格以增加可读性" },
 	{ "enumerate", JSON_FORMAT_ENUMERATE, 
-		"Use textual representations of enumerated values rather than "
-		"raw numeric values" },
+		"使用枚举值文本表示而不是原始数值" },
 	{ "bitmask", JSON_FORMAT_BITMASK, 
-		"Use textual representations of bitmask values rather than "
-		"raw numeric values" },
+		"使用掩码值文本表示而不是原始数值" },
 	{ "duration", JSON_FORMAT_DURATION, 
-		"Use textual representations (xd xh xm xs) of duration values rather "
-		"than raw number of seconds" },
+		"使用持续时间值的文本表示(xd xh xm xs)而不是原始秒数" },
 #if 0
 	{ "datetime", JSON_FORMAT_DATETIME, 
-		"Format date/time values according to the supplied strftime format "
-		"or '%%Y-%%m-%%d %%H:%%M:%%S' if no format specified" },
+		"如果没有指定格式根据提供的strftime格式或者'%%Y-%%m-%%d %%H:%%M:%%S'格式格式化日期/时间值'" },
 	{ "date", JSON_FORMAT_DATE, 
-		"Format dates according to the supplied strftime format or "
-		"default Javascript format (number of ms since the beginning of the "
-		"Unix epoch) if no format specified" },
+		"如果没有指定格式根据提供的strftime格式或Javascript格式格式化日期值" },
 	{ "time", JSON_FORMAT_TIME, 
-		"Format times according the supplied strftime format or "
-		"'%%H:%%M:%%S' in for format specified" },
+		"指定使用提供的strftime格式或者'%%H:%%M:%%S'格式格式化时间值" },
 #endif
 	{ NULL, -1, NULL },
 	};
@@ -158,68 +151,65 @@ const string_value_mapping svm_acknowledgement_types[] = {
 	};
 
 const string_value_mapping svm_comment_types[] = {
-	{ "host", HOST_COMMENT, "Host Comment" },
-	{ "service", SERVICE_COMMENT, "Service Comment" },
+	{ "host", HOST_COMMENT, "主机注释" },
+	{ "service", SERVICE_COMMENT, "服务注释" },
 	{ NULL, -1, NULL },
 	};
 
 const string_value_mapping svm_comment_entry_types[] = {
-	{ "user", USER_COMMENT, "User Comment" },
-	{ "downtime", DOWNTIME_COMMENT, "Downtime Comment" },
-	{ "flapping", FLAPPING_COMMENT, "Flapping Comment" },
-	{ "acknowledgement", ACKNOWLEDGEMENT_COMMENT, "Acknowledgement Comment" },
+	{ "user", USER_COMMENT, "用户注释" },
+	{ "downtime", DOWNTIME_COMMENT, "宕机时间注释" },
+	{ "flapping", FLAPPING_COMMENT, "抖动注释" },
+	{ "acknowledgement", ACKNOWLEDGEMENT_COMMENT, "问题确认注释" },
 	{ NULL, -1, NULL },
 	};
 
 const string_value_mapping svm_downtime_types[] = {
-	{ "service", SERVICE_DOWNTIME, "Service Downtime" },
-	{ "host", HOST_DOWNTIME, "Host Downtime" },
-	{ "any", ANY_DOWNTIME, "Any Downtime" },
+	{ "service", SERVICE_DOWNTIME, "服务宕机时间" },
+	{ "host", HOST_DOWNTIME, "主机宕机时间" },
+	{ "any", ANY_DOWNTIME, "任何宕机时间" },
 	{ NULL, -1, NULL },
 	};
 
 #ifdef JSON_NAGIOS_4X
 const string_value_mapping svm_option_types[] = {
-	{ "up", OPT_UP, "Up" },
-	{ "down", OPT_DOWN, "Down" },
-	{ "unreachable", OPT_UNREACHABLE, "Unreachable" },
-	{ "ok", OPT_OK, "OK" },
-	{ "unkwown", OPT_UNKNOWN, "Unknown" },
-	{ "warning", OPT_WARNING, "Warning" },
-	{ "critical", OPT_CRITICAL, "Critical" },
-	{ "recovery", OPT_RECOVERY, "Recovery" },
-	{ "pending", OPT_PENDING, "Pending" },
-	{ "flapping", OPT_FLAPPING, "Flapping" },
-	{ "downtime", OPT_DOWNTIME, "Downtime" },
+	{ "up", OPT_UP, "运行" },
+	{ "down", OPT_DOWN, "宕机" },
+	{ "unreachable", OPT_UNREACHABLE, "不可达" },
+	{ "ok", OPT_OK, "正常" },
+	{ "unkwown", OPT_UNKNOWN, "未知" },
+	{ "warning", OPT_WARNING, "警告" },
+	{ "critical", OPT_CRITICAL, "紧急" },
+	{ "recovery", OPT_RECOVERY, "恢复" },
+	{ "pending", OPT_PENDING, "未决" },
+	{ "flapping", OPT_FLAPPING, "抖动" },
+	{ "downtime", OPT_DOWNTIME, "宕机时间" },
 	{ NULL, -1, NULL },
 	};
 #endif
 
 const string_value_mapping parent_host_extras[] = {
-	{ "none", 0, "Hosts that are directly reachable by the Nagios Core host" },
+	{ "none", 0, "Nagios内核主机可直连的主机" },
 	{ NULL, -1, NULL },
 	};
 
 const string_value_mapping child_host_extras[] = {
-	{ "none", 0, "Hosts that have no child hosts" },
+	{ "none", 0, "没有下层节点主机的主机" },
 	{ NULL, -1, NULL },
 	};
 
 const string_value_mapping parent_service_extras[] = {
-	{ "none", 0, "Services that have no parent services" },
+	{ "none", 0, "没有上层节点服务的服务" },
 	{ NULL, -1, NULL },
 	};
 
 const string_value_mapping child_service_extras[] = {
-	{ "none", 0, "Services that have no child services" },
+	{ "none", 0, "没有下层节点服务的服务" },
 	{ NULL, -1, NULL },
 	};
 
-const char *dayofweek[7] = { "Sunday", "Monday", "Tuesday", "Wednesday",
-		"Thursday", "Friday", "Saturday" };
-const char *month[12] = { "January", "February", "March", "April", "May",
-		"June", "July", "August", "September", "October", "November",
-		"December" };
+const char *dayofweek[7] = { "周日","周一","周二","周三","周四","周五","周六" };
+const char *month[12] = { "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月" };
 
 static const json_escape_pair string_escape_pairs[] = {
 	{ L"\\", L"\\\\" },
@@ -1071,7 +1061,7 @@ void json_duration(int padding, int whitespace, char *key, unsigned long value,
 		minutes = (unsigned)(value / 60);
 		value -= minutes * 60;
 		seconds = value;
-		snprintf(buf, sizeof(buf)-1, "%ud %uh %um %us", days, hours, minutes, 
+		snprintf(buf, sizeof(buf)-1, "%u日 %u时 %u分 %u秒", days, hours, minutes, 
 				seconds);
 		}
 
@@ -1100,7 +1090,7 @@ void json_enumeration(json_object *json_parent, unsigned format_options,
 			}
 			if( NULL == svmp->string) {
 				json_object_append_string(json_parent, key, NULL,
-						"Unknown value %d", svmp->value);
+						"未知的值 %d", svmp->value);
 				}
 		}
 	else {
@@ -1143,7 +1133,7 @@ int parse_bitmask_cgivar(char *cgi, char *query, int query_status,
 		json_object_append_object(json_parent, "result", 
 				json_result(query_time, cgi, query, query_status,
 				(time_t)-1, authinfo, RESULT_OPTION_VALUE_MISSING,
-				"No value specified for %s option.", key));
+				"%s 选项没有指定值。", key));
 		return RESULT_OPTION_VALUE_MISSING;
 		}
 
@@ -1159,7 +1149,7 @@ int parse_bitmask_cgivar(char *cgi, char *query, int query_status,
 			json_object_append_object(json_parent, "result", 
 					json_result(query_time, cgi, query, query_status,
 					(time_t)-1, authinfo, RESULT_OPTION_VALUE_INVALID,
-					"The %s option value '%s' is invalid.", key, option));
+					"%s 选项的值 '%s' 是错误的。", key, option));
 			result = RESULT_OPTION_VALUE_INVALID;
 			break;
 			}
@@ -1178,7 +1168,7 @@ int parse_enumeration_cgivar(char *cgi, char *query, int query_status,
 		json_object_append_object(json_parent, "result", 
 				json_result(query_time, cgi, query, query_status,
 				(time_t)-1, authinfo, RESULT_OPTION_VALUE_MISSING,
-				"No value specified for %s option.", key));
+				"%s 选项没有指定值。", key));
 		return RESULT_OPTION_VALUE_MISSING;
 		}
 
@@ -1192,7 +1182,7 @@ int parse_enumeration_cgivar(char *cgi, char *query, int query_status,
 		json_object_append_object(json_parent, "result", 
 				json_result(query_time, cgi, query, query_status,
 				(time_t)-1, authinfo, RESULT_OPTION_VALUE_INVALID,
-				"The %s option value '%s' is invalid.", key, value));
+				"%s 选项的值 '%s' 是错误的。", key, value));
 		return RESULT_OPTION_VALUE_INVALID;
 		} 
 
@@ -1208,7 +1198,7 @@ int parse_string_cgivar(char *cgi, char *query, int query_status,
 		json_object_append_object(json_parent, "result", 
 				json_result(query_time, cgi, query, query_status,
 				(time_t)-1, authinfo, RESULT_OPTION_VALUE_MISSING,
-				"No value specified for %s option.", key));
+				"%s 选项没有指定值。", key));
 		return RESULT_OPTION_VALUE_MISSING;
 		}
 
@@ -1216,7 +1206,7 @@ int parse_string_cgivar(char *cgi, char *query, int query_status,
 		json_object_append_object(json_parent, "result", 
 				json_result(query_time, cgi, query, query_status,
 				(time_t)-1, authinfo, RESULT_MEMORY_ALLOCATION_ERROR,
-				"Unable to allocate memory for %s option.", key));
+				"不能为 %s 选项分配内存。", key));
 		return RESULT_MEMORY_ALLOCATION_ERROR;
 		}
 
@@ -1234,7 +1224,7 @@ int parse_time_cgivar(char *cgi, char *query, int query_status,
 		json_object_append_object(json_parent, "result", 
 				json_result(query_time, cgi, query, query_status,
 				(time_t)-1, authinfo, RESULT_OPTION_VALUE_MISSING,
-				"No value specified for %s option.", key));
+				"%s 选项没有指定值。", key));
 		return RESULT_OPTION_VALUE_MISSING;
 		}
 
@@ -1263,7 +1253,7 @@ int parse_boolean_cgivar(char *cgi, char *query, int query_status,
 		json_object_append_object(json_parent, "result", 
 				json_result(query_time, cgi, query, query_status,
 				(time_t)-1, authinfo, RESULT_OPTION_VALUE_MISSING,
-				"No value specified for %s option.", key));
+				"%s 选项没有指定值。", key));
 		return ERROR;
 		}
 
@@ -1277,7 +1267,7 @@ int parse_boolean_cgivar(char *cgi, char *query, int query_status,
 		json_object_append_object(json_parent, "result", 
 				json_result(query_time, cgi, query, query_status,
 				(time_t)-1, authinfo, RESULT_OPTION_VALUE_INVALID,
-				"Value for %s option must be 'true' or 'false'.", key));
+				"%s 选项的值必须为 'true' 或者 'false'。", key));
 		return RESULT_OPTION_VALUE_INVALID;
 		}
 
@@ -1293,7 +1283,7 @@ int parse_int_cgivar(char *cgi, char *query, int query_status,
 		json_object_append_object(json_parent, "result", 
 				json_result(query_time, cgi, query, query_status,
 				(time_t)-1, authinfo, RESULT_OPTION_VALUE_MISSING,
-				"No value specified for %s option.", key));
+				"%s 选项没有指定值。", key));
 		return RESULT_OPTION_VALUE_MISSING;
 		}
 
@@ -1343,7 +1333,7 @@ time_t compile_time(const char *date, const char *time) {
 	int second;
 
     struct tm t;
-    const char *months = "JanFebMarAprMayJunJulAugSepOctNovDec";
+    const char *months = "JanFebMarApr5JunJulAugSepOctNovDec";
 
     sscanf(date, "%s %d %d", buf, &day, &year);
     sscanf(time, "%d:%d:%d", &hour, &minute, &second);

@@ -201,10 +201,10 @@ int main(int argc, char **argv) {
 		struct nagios_extcmd *cmd = &in_core_commands[i];
 		if(!cmd->handler) {
 			no_handler++;
-			printf("%s has no handler\n", extcmd_get_name(i));
+			printf("%s 没有执行\n", extcmd_get_name(i));
 			}
 		}
-	printf("%d of %d commands have no handler\n",
+	printf("%d of %d 命令没有执行\n",
 	       no_handler, ARRAY_SIZE(in_core_commands));
 
 	return 0;

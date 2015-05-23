@@ -150,7 +150,7 @@ char **getcgivars(void) {
 		else
 			cgiinput = strdup(getenv("QUERY_STRING"));
 		if(cgiinput == NULL) {
-			printf("getcgivars(): Could not allocate memory for CGI input.\n");
+			printf("getcgivars(): 无法为CGI输入分配内存。\n");
 			exit(1);
 			}
 		}
@@ -165,7 +165,7 @@ char **getcgivars(void) {
 			content_type = "";
 
 		if(strlen(content_type) && strncasecmp(content_type, "application/x-www-form-urlencoded", 33)) {
-			printf("getcgivars(): Unsupported Content-Type.\n");
+			printf("getcgivars(): 不支持的内容类型。\n");
 			exit(1);
 			}
 
@@ -174,28 +174,28 @@ char **getcgivars(void) {
 			content_length_string = "0";
 
 		if(!(content_length = atoi(content_length_string))) {
-			printf("getcgivars(): No Content-Length was sent with the POST request.\n") ;
+			printf("getcgivars(): POST请求发送的内容长度为空。\n") ;
 			exit(1);
 			}
 		/* suspicious content length */
 		if((content_length < 0) || (content_length >= INT_MAX - 1)) {
-			printf("getcgivars(): Suspicious Content-Length was sent with the POST request.\n");
+			printf("getcgivars(): POST请求发送的内容长度不可信。\n");
 			exit(1);
 			}
 
 		if(!(cgiinput = (char *)malloc(content_length + 1))) {
-			printf("getcgivars(): Could not allocate memory for CGI input.\n");
+			printf("getcgivars(): 无法为CGI输入分配内存。\n");
 			exit(1);
 			}
 		if(!fread(cgiinput, content_length, 1, stdin)) {
-			printf("getcgivars(): Could not read input from STDIN.\n");
+			printf("getcgivars(): 无法从标准输入设备读取输入。\n");
 			exit(1);
 			}
 		cgiinput[content_length] = '\0';
 		}
 	else {
 
-		printf("getcgivars(): Unsupported REQUEST_METHOD -> '%s'\n", request_method);
+		printf("getcgivars(): 不支持的请求方式 -> '%s'\n", request_method);
 		printf("\n");
 		printf("I'm guessing you're trying to execute the CGI from a command line.\n");
 		printf("In order to do that, you need to set the REQUEST_METHOD environment\n");
@@ -207,6 +207,12 @@ char **getcgivars(void) {
 		printf("\"REMOTE_USER\" environment variable to be the name of the user you're\n");
 		printf("\"authenticated\" as.\n");
 		printf("\n");
+		printf("猜想你试图在命令行方式下运行这个cgi程序？如果真是这样，得设置环境变量\n");
+		printf("REQUEST_METHOD，可以是\"GET\"、\"HEAD\"或\"POST\"，如果是GET或HEAD时，还要\n");
+		printf("设置环境变量QUERY_STRING值，如果是\"PUT\"，数据块是从STDIN里读入的。如果\n");
+		printf("配置了CGI的授权，要在环境变量REMOTE_USER里设置授权人的名字。\n象这样：\n");
+		printf("\texport REQUEST_METHOD=\"GET\"\n\texport QUERY_STRING=\"host=all\"\n");
+		printf("\texport REMOTE_USER=nagiosadmin\n再执行一下程序就可以了。\n");
 
 		exit(1);
 		}
@@ -222,7 +228,7 @@ char **getcgivars(void) {
 	   amount as necessary... */
 	pairlist = (char **)malloc(256 * sizeof(char **));
 	if(pairlist == NULL) {
-		printf("getcgivars(): Could not allocate memory for name-value pairlist.\n");
+		printf("getcgivars(): 无法为Name-Value对列表分配内存。\n");
 		exit(1);
 		}
 	paircount = 0;
@@ -230,14 +236,14 @@ char **getcgivars(void) {
 	while(nvpair) {
 		pairlist[paircount] = strdup(nvpair);
 		if( NULL == pairlist[paircount]) {
-			printf("getcgivars(): Could not allocate memory for name-value pair #%d.\n", paircount);
+			printf("getcgivars(): 无法为Name-Value对#%d分配内存。\n", paircount);
 			exit(1);
 			}
 		paircount++;
 		if(!(paircount % 256)) {
 			pairlist = (char **)realloc(pairlist, (paircount + 256) * sizeof(char **));
 			if(pairlist == NULL) {
-				printf("getcgivars(): Could not re-allocate memory for name-value pairlist.\n");
+				printf("getcgivars(): 无法为Name-Value对列表重新分配内存。\n");
 				exit(1);
 				}
 			}
@@ -250,7 +256,7 @@ char **getcgivars(void) {
 	/* extract the names and values from the pairlist */
 	cgivars = (char **)malloc((paircount * 2 + 1) * sizeof(char **));
 	if(cgivars == NULL) {
-		printf("getcgivars(): Could not allocate memory for name-value list.\n");
+		printf("getcgivars(): 无法为Name-Value列表分配内存。\n");
 		exit(1);
 		}
 	for(i = 0; i < paircount; i++) {
@@ -260,7 +266,7 @@ char **getcgivars(void) {
 			*eqpos = '\0';
 			cgivars[i * 2 + 1] = strdup(eqpos + 1);
 			if( NULL == cgivars[ i * 2 + 1]) {
-				printf("getcgivars(): Could not allocate memory for cgi value #%d.\n", i);
+				printf("getcgivars(): 无法为cgi值#%d分配内存。\n", i);
 				exit(1);
 				}
 			unescape_cgi_input(cgivars[i * 2 + 1]);
@@ -268,7 +274,7 @@ char **getcgivars(void) {
 		else {
 			cgivars[i * 2 + 1] = strdup("");
 			if( NULL == cgivars[ i * 2 + 1]) {
-				printf("getcgivars(): Could not allocate memory for empty stringfor variable value #%d.\n", i);
+				printf("getcgivars(): 无法为空变量#%d分配内存。\n", i);
 				exit(1);
 				}
 			unescape_cgi_input(cgivars[i * 2 + 1]);
@@ -277,7 +283,7 @@ char **getcgivars(void) {
 		/* get the variable value (or name/value of there was no real "pair" in the first place) */
 		cgivars[i * 2] = strdup(pairlist[i]);
 		if( NULL == cgivars[ i * 2]) {
-			printf("getcgivars(): Could not allocate memory for cgi name #%d.\n", i);
+			printf("getcgivars(): 无法为cgi名称#%d分配内存。\n", i);
 			exit(1);
 			}
 		unescape_cgi_input(cgivars[i * 2]);
@@ -357,14 +363,14 @@ accept_languages * parse_accept_languages( char * acceptlang) {
 
 	/* Duplicate the browser supplied HTTP_ACCEPT_LANGUAGE variable */
 	if( NULL == ( langdup = strdup( acceptlang))) {
-		printf( "Unable to allocate memory for langdup\n");
+		printf( "无法分配内存到langdup\n");
 		return NULL;
 	}
 
 	/* Initialize the structure to contain the parsed HTTP_ACCEPT_LANGUAGE
 		information */
 	if( NULL == ( langs = malloc( sizeof( accept_languages)))) {
-		printf( "Unable to allocate memory for langs\n");
+		printf( "无法分配内存到langs\n");
 		free( langdup);
 		return NULL;
 	}
@@ -380,7 +386,7 @@ accept_languages * parse_accept_languages( char * acceptlang) {
 			/* Adding first language */
 			if( NULL == ( langs->languages =
 					malloc( langs->count * sizeof( accept_language *)))) {
-				printf( "Unable to allocate memory for first language\n");
+				printf( "无法分配内存到第一语言\n");
 				langs->count--;
 				free_accept_languages( langs);
 				free( langdup);
@@ -391,7 +397,7 @@ accept_languages * parse_accept_languages( char * acceptlang) {
 			/* Adding additional language */
 			if( NULL == ( langs->languages = realloc( langs->languages,
 					langs->count * sizeof( accept_language *)))) {
-				printf( "Unable to allocate memory for additional language\n");
+				printf( "无法分配内存到额外的语言\n");
 				langs->count--;
 				free_accept_languages( langs);
 				free( langdup);
@@ -400,7 +406,7 @@ accept_languages * parse_accept_languages( char * acceptlang) {
 		}
 		if( NULL == ( langs->languages[ langs->count - 1] =
 				malloc( sizeof( accept_language)))) {
-			printf( "Unable to allocate memory for language\n");
+			printf( "无法分配内存到语言\n");
 			langs->count--;
 			free_accept_languages( langs);
 			free( langdup);
@@ -428,7 +434,7 @@ accept_languages * parse_accept_languages( char * acceptlang) {
 			/* We have a locality delimiter, so copy it */
 			if( NULL == ( langs->languages[ langs->count - 1]->locality =
 					strdup( localitydelim + 1))) {
-				printf( "Unable to allocate memory for locality '%s'\n",
+				printf( "无法分配内存到位置 '%s'\n",
 						langtok);
 				free_accept_languages( langs);
 				free( langdup);
@@ -447,7 +453,7 @@ accept_languages * parse_accept_languages( char * acceptlang) {
 		}
 		if( NULL == ( langs->languages[ langs->count - 1]->language =
 				strdup( langtok))) {
-			printf( "Unable to allocate memory for language '%s'\n",
+			printf( "无法分配内存到语言 '%s'\n",
 					langtok);
 			free_accept_languages( langs);
 			free( langdup);

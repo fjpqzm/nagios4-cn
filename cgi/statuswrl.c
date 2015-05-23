@@ -994,16 +994,16 @@ void draw_host(host *temp_host) {
 			}
 		printf("the_text [\"%s\", \"%s\", ", temp_host->name, temp_host->alias);
 		if(temp_hoststatus == NULL)
-			strcpy(state_string, "UNKNOWN");
+			strcpy(state_string, "未知");
 		else {
 			if(temp_hoststatus->status == SD_HOST_DOWN)
-				strcpy(state_string, "DOWN");
+				strcpy(state_string, "宕机");
 			else if(temp_hoststatus->status == SD_HOST_UNREACHABLE)
-				strcpy(state_string, "UNREACHABLE");
+				strcpy(state_string, "不可达");
 			else if(temp_hoststatus->status == HOST_PENDING)
-				strcpy(state_string, "PENDING");
+				strcpy(state_string, "未决");
 			else
-				strcpy(state_string, "UP");
+				strcpy(state_string, "运行");
 			}
 		printf("\"%s\"]\n", state_string);
 

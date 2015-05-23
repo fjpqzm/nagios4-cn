@@ -778,7 +778,7 @@ int main(void) {
 				svm_get_string_from_value(cgi_data.query, valid_queries), 
 				get_query_status(query_status, cgi_data.query),
 				(time_t)-1, NULL, RESULT_FILE_OPEN_READ_ERROR,
-				"Error: Could not open CGI configuration file '%s' for reading!", 
+				"错误: CGI配置文件'%s'无法打开!", 
 				get_cgi_config_location()));
 		json_object_append_object(json_root, "data", json_help(status_json_help));
 		json_object_print(json_root, 0, 1, cgi_data.strftime_format, 
@@ -795,7 +795,7 @@ int main(void) {
 				svm_get_string_from_value(cgi_data.query, valid_queries), 
 				get_query_status(query_status, cgi_data.query),
 				(time_t)-1, NULL, RESULT_FILE_OPEN_READ_ERROR,
-				"Error: Could not open main configuration file '%s' for reading!", 
+				"错误: 主配置文件'%s'无法打开!", 
 				main_config_file));
 		json_object_append_object(json_root, "data", json_help(status_json_help));
 		json_object_print(json_root, 0, 1, cgi_data.strftime_format, 
@@ -813,7 +813,7 @@ int main(void) {
 				svm_get_string_from_value(cgi_data.query, valid_queries), 
 				get_query_status(query_status, cgi_data.query),
 				(time_t)-1, NULL, RESULT_FILE_OPEN_READ_ERROR,
-				"Error: Could not read some or all object configuration data!"));
+				"错误: 无法读取部分或者全部对象配置数据!"));
 		json_object_append_object(json_root, "data", json_help(status_json_help));
 		json_object_print(json_root, 0, 1, cgi_data.strftime_format, 
 				cgi_data.format_options);
@@ -846,7 +846,7 @@ int main(void) {
 				svm_get_string_from_value(cgi_data.query, valid_queries), 
 				get_query_status(query_status, cgi_data.query),
 				(time_t)-1, NULL, RESULT_FILE_OPEN_READ_ERROR,
-				"Error: Could not read host and service status information!"));
+				"错误: 无法获得到主机和服务的状态信息!"));
 		json_object_append_object(json_root, "data", json_help(status_json_help));
 		json_object_print(json_root, 0, 1, cgi_data.strftime_format, 
 				cgi_data.format_options);

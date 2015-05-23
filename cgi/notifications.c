@@ -104,34 +104,34 @@ int main(void) {
 		printf("<td align=left valign=top width=33%%>\n");
 
 		if(query_type == FIND_SERVICE)
-			snprintf(temp_buffer, sizeof(temp_buffer) - 1, "Service Notifications");
+			snprintf(temp_buffer, sizeof(temp_buffer) - 1, "服务的通知");
 		else if(query_type == FIND_HOST) {
 			if(find_all == TRUE)
-				snprintf(temp_buffer, sizeof(temp_buffer) - 1, "Notifications");
+				snprintf(temp_buffer, sizeof(temp_buffer) - 1, "通知");
 			else
-				snprintf(temp_buffer, sizeof(temp_buffer) - 1, "Host Notifications");
+				snprintf(temp_buffer, sizeof(temp_buffer) - 1, "主机的通知");
 			}
 		else
-			snprintf(temp_buffer, sizeof(temp_buffer) - 1, "Contact Notifications");
+			snprintf(temp_buffer, sizeof(temp_buffer) - 1, "联系人的通知");
 		display_info_table(temp_buffer, FALSE, &current_authdata);
 
 		if(query_type == FIND_HOST || query_type == FIND_SERVICE) {
 			printf("<TABLE BORDER=1 CELLPADDING=0 CELLSPACING=0 CLASS='linkBox'>\n");
 			printf("<TR><TD CLASS='linkBox'>\n");
 			if(query_type == FIND_HOST) {
-				printf("<A HREF='%s?host=%s'>View Status Detail For %s</A><BR>\n", STATUS_CGI, (find_all == TRUE) ? "all" : url_encode(query_host_name), (find_all == TRUE) ? "All Hosts" : "This Host");
-				printf("<A HREF='%s?host=%s'>View History For %s</A><BR>\n", HISTORY_CGI, (find_all == TRUE) ? "all" : url_encode(query_host_name), (find_all == TRUE) ? "All Hosts" : "This Host");
+				printf("<A HREF='%s?host=%s'>%s的详细状态</A><BR>\n", STATUS_CGI, (find_all == TRUE) ? "all" : url_encode(query_host_name), (find_all == TRUE) ? "所有主机" : "该主机");
+				printf("<A HREF='%s?host=%s'>%s的历史信息</A><BR>\n", HISTORY_CGI, (find_all == TRUE) ? "all" : url_encode(query_host_name), (find_all == TRUE) ? "所有主机" : "该主机");
 #ifdef USE_TRENDS
 				if(find_all == FALSE)
-					printf("<A HREF='%s?host=%s'>View Trends For This Host</A><BR>\n", TRENDS_CGI, url_encode(query_host_name));
+					printf("<A HREF='%s?host=%s'>查看主机的趋势</A><BR>\n", TRENDS_CGI, url_encode(query_host_name));
 #endif
 				}
 			else if(query_type == FIND_SERVICE) {
 				printf("<A HREF='%s?host=%s&", HISTORY_CGI, (find_all == TRUE) ? "all" : url_encode(query_host_name));
-				printf("service=%s'>View History For This Service</A><BR>\n", url_encode(query_svc_description));
+				printf("service=%s'>查看该服务的历史</A><BR>\n", url_encode(query_svc_description));
 #ifdef USE_TRENDS
 				printf("<A HREF='%s?host=%s&", TRENDS_CGI, (find_all == TRUE) ? "all" : url_encode(query_host_name));
-				printf("service=%s'>View Trends For This Service</A><BR>\n", url_encode(query_svc_description));
+				printf("service=%s'>查看服务的趋势</A><BR>\n", url_encode(query_svc_description));
 #endif
 				}
 			printf("</TD></TR>\n");
@@ -146,18 +146,18 @@ int main(void) {
 
 		printf("<DIV ALIGN=CENTER CLASS='dataTitle'>\n");
 		if(query_type == FIND_SERVICE)
-			printf("Service '%s' On Host '%s'", query_svc_description, query_host_name);
+			printf("主机 '%s' 上 '%s' 服务", query_host_name, query_svc_description);
 		else if(query_type == FIND_HOST) {
 			if(find_all == TRUE)
-				printf("All Hosts and Services");
+				printf("所有的主机及服务");
 			else
-				printf("Host '%s'", query_host_name);
+				printf("主机 '%s'", query_host_name);
 			}
 		else {
 			if(find_all == TRUE)
-				printf("All Contacts");
+				printf("所有的联系人");
 			else
-				printf("Contact '%s'", query_contact_name);
+				printf("联系人 '%s'", query_contact_name);
 			}
 		printf("</DIV>\n");
 		printf("<BR>\n");
@@ -189,43 +189,43 @@ int main(void) {
 		printf("<table border=0 CLASS='optBox'>\n");
 		printf("<tr>\n");
 		if(query_type == FIND_SERVICE)
-			printf("<td align=left colspan=2 CLASS='optBoxItem'>Notification detail level for this service:</td>");
+			printf("<td align=left colspan=2 CLASS='optBoxItem'>该服务的通知详细级别:</td>");
 		else
-			printf("<td align=left colspan=2 CLASS='optBoxItem'>Notification detail level for %s %s%s:</td>", (find_all == TRUE) ? "all" : "this", (query_type == FIND_HOST) ? "host" : "contact", (find_all == TRUE) ? "s" : "");
+			printf("<td align=left colspan=2 CLASS='optBoxItem'>%s%s的通知详细级别:</td>",(find_all==TRUE)?"所有":"该",(query_type==FIND_HOST)?"主机":"联系人");
 		printf("</tr>\n");
 		printf("<tr>\n");
 		printf("<td align=left colspan=2 CLASS='optBoxItem'><select name='type'>\n");
-		printf("<option value=%d %s>All notifications\n", NOTIFICATION_ALL, (notification_options == NOTIFICATION_ALL) ? "selected" : "");
+		printf("<option value=%d %s>所有的通知\n", NOTIFICATION_ALL, (notification_options == NOTIFICATION_ALL) ? "selected" : "");
 		if(query_type != FIND_SERVICE) {
-			printf("<option value=%d %s>All service notifications\n", NOTIFICATION_SERVICE_ALL, (notification_options == NOTIFICATION_SERVICE_ALL) ? "selected" : "");
-			printf("<option value=%d %s>All host notifications\n", NOTIFICATION_HOST_ALL, (notification_options == NOTIFICATION_HOST_ALL) ? "selected" : "");
+			printf("<option value=%d %s>所有服务的通知\n", NOTIFICATION_SERVICE_ALL, (notification_options == NOTIFICATION_SERVICE_ALL) ? "selected" : "");
+			printf("<option value=%d %s>所有主机的通知\n", NOTIFICATION_HOST_ALL, (notification_options == NOTIFICATION_HOST_ALL) ? "selected" : "");
 			}
-		printf("<option value=%d %s>Service custom\n", NOTIFICATION_SERVICE_CUSTOM, (notification_options == NOTIFICATION_SERVICE_CUSTOM) ? "selected" : "");
-		printf("<option value=%d %s>Service acknowledgements\n", NOTIFICATION_SERVICE_ACK, (notification_options == NOTIFICATION_SERVICE_ACK) ? "selected" : "");
-		printf("<option value=%d %s>Service warning\n", NOTIFICATION_SERVICE_WARNING, (notification_options == NOTIFICATION_SERVICE_WARNING) ? "selected" : "");
-		printf("<option value=%d %s>Service unknown\n", NOTIFICATION_SERVICE_UNKNOWN, (notification_options == NOTIFICATION_SERVICE_UNKNOWN) ? "selected" : "");
-		printf("<option value=%d %s>Service critical\n", NOTIFICATION_SERVICE_CRITICAL, (notification_options == NOTIFICATION_SERVICE_CRITICAL) ? "selected" : "");
-		printf("<option value=%d %s>Service recovery\n", NOTIFICATION_SERVICE_RECOVERY, (notification_options == NOTIFICATION_SERVICE_RECOVERY) ? "selected" : "");
-		printf("<option value=%d %s>Service flapping\n", NOTIFICATION_SERVICE_FLAP, (notification_options == NOTIFICATION_SERVICE_FLAP) ? "selected" : "");
-		printf("<option value=%d %s>Service downtime\n", NOTIFICATION_SERVICE_DOWNTIME, (notification_options == NOTIFICATION_SERVICE_DOWNTIME) ? "selected" : "");
+		printf("<option value=%d %s>服务定制\n", NOTIFICATION_SERVICE_CUSTOM, (notification_options == NOTIFICATION_SERVICE_CUSTOM) ? "selected" : "");
+		printf("<option value=%d %s>确认状态的服务\n", NOTIFICATION_SERVICE_ACK, (notification_options == NOTIFICATION_SERVICE_ACK) ? "selected" : "");
+		printf("<option value=%d %s>警告状态的服务\n", NOTIFICATION_SERVICE_WARNING, (notification_options == NOTIFICATION_SERVICE_WARNING) ? "selected" : "");
+		printf("<option value=%d %s>未知状态的服务\n", NOTIFICATION_SERVICE_UNKNOWN, (notification_options == NOTIFICATION_SERVICE_UNKNOWN) ? "selected" : "");
+		printf("<option value=%d %s>紧急状态的服务\n", NOTIFICATION_SERVICE_CRITICAL, (notification_options == NOTIFICATION_SERVICE_CRITICAL) ? "selected" : "");
+		printf("<option value=%d %s>恢复状态的服务\n", NOTIFICATION_SERVICE_RECOVERY, (notification_options == NOTIFICATION_SERVICE_RECOVERY) ? "selected" : "");
+		printf("<option value=%d %s>抖动状态的服务\n", NOTIFICATION_SERVICE_FLAP, (notification_options == NOTIFICATION_SERVICE_FLAP) ? "selected" : "");
+		printf("<option value=%d %s>宕机时间内的服务\n", NOTIFICATION_SERVICE_DOWNTIME, (notification_options == NOTIFICATION_SERVICE_DOWNTIME) ? "selected" : "");
 		if(query_type != FIND_SERVICE) {
-			printf("<option value=%d %s>Host custom\n", NOTIFICATION_HOST_CUSTOM, (notification_options == NOTIFICATION_HOST_CUSTOM) ? "selected" : "");
-			printf("<option value=%d %s>Host acknowledgements\n", NOTIFICATION_HOST_ACK, (notification_options == NOTIFICATION_HOST_ACK) ? "selected" : "");
-			printf("<option value=%d %s>Host down\n", NOTIFICATION_HOST_DOWN, (notification_options == NOTIFICATION_HOST_DOWN) ? "selected" : "");
-			printf("<option value=%d %s>Host unreachable\n", NOTIFICATION_HOST_UNREACHABLE, (notification_options == NOTIFICATION_HOST_UNREACHABLE) ? "selected" : "");
-			printf("<option value=%d %s>Host recovery\n", NOTIFICATION_HOST_RECOVERY, (notification_options == NOTIFICATION_HOST_RECOVERY) ? "selected" : "");
-			printf("<option value=%d %s>Host flapping\n", NOTIFICATION_HOST_FLAP, (notification_options == NOTIFICATION_HOST_FLAP) ? "selected" : "");
-			printf("<option value=%d %s>Host downtime\n", NOTIFICATION_HOST_DOWNTIME, (notification_options == NOTIFICATION_HOST_DOWNTIME) ? "selected" : "");
+			printf("<option value=%d %s>主机定制\n", NOTIFICATION_HOST_CUSTOM, (notification_options == NOTIFICATION_HOST_CUSTOM) ? "selected" : "");
+			printf("<option value=%d %s>确认状态的主机\n", NOTIFICATION_HOST_ACK, (notification_options == NOTIFICATION_HOST_ACK) ? "selected" : "");
+			printf("<option value=%d %s>宕机状态的主机\n", NOTIFICATION_HOST_DOWN, (notification_options == NOTIFICATION_HOST_DOWN) ? "selected" : "");
+			printf("<option value=%d %s>不可达状态的主机\n", NOTIFICATION_HOST_UNREACHABLE, (notification_options == NOTIFICATION_HOST_UNREACHABLE) ? "selected" : "");
+			printf("<option value=%d %s>恢复状态的主机\n", NOTIFICATION_HOST_RECOVERY, (notification_options == NOTIFICATION_HOST_RECOVERY) ? "selected" : "");
+			printf("<option value=%d %s>抖动状态的主机\n", NOTIFICATION_HOST_FLAP, (notification_options == NOTIFICATION_HOST_FLAP) ? "selected" : "");
+			printf("<option value=%d %s>宕机时间内的主机\n", NOTIFICATION_HOST_DOWNTIME, (notification_options == NOTIFICATION_HOST_DOWNTIME) ? "selected" : "");
 			}
 		printf("</select></td>\n");
 		printf("</tr>\n");
 		printf("<tr>\n");
-		printf("<td align=left CLASS='optBoxItem'>Older Entries First:</td>\n");
+		printf("<td align=left CLASS='optBoxItem'>旧的数据项优先:</td>\n");
 		printf("<td></td>\n");
 		printf("</tr>\n");
 		printf("<tr>\n");
 		printf("<td align=left valign=bottom CLASS='optBoxItem'><input type='checkbox' name='oldestfirst' %s></td>", (use_lifo == FALSE) ? "checked" : "");
-		printf("<td align=right CLASS='optBoxItem'><input type='submit' value='Update'></td>\n");
+		printf("<td align=right CLASS='optBoxItem'><input type='submit' value='更新'></td>\n");
 		printf("</tr>\n");
 
 		/* display context-sensitive help */
@@ -283,7 +283,7 @@ void document_header(int use_stylesheet) {
 	printf("<head>\n");
 	printf("<link rel=\"shortcut icon\" href=\"%sfavicon.ico\" type=\"image/ico\">\n", url_images_path);
 	printf("<title>\n");
-	printf("Alert Notifications\n");
+	printf("报警通知\n");
 	printf("</title>\n");
 
 	if(use_stylesheet == TRUE) {
@@ -470,10 +470,10 @@ void display_notifications(void) {
 		result = read_file_into_lifo(log_file_to_use);
 		if(result != LIFO_OK) {
 			if(result == LIFO_ERROR_MEMORY) {
-				printf("<P><DIV CLASS='warningMessage'>Not enough memory to reverse log file - displaying notifications in natural order...</DIV></P>");
+				printf("<P><DIV CLASS='warningMessage'>没有足够的内存来转存日志文件 - 通知信息以默认顺序显示...</DIV></P>");
 				}
 			else if(result == LIFO_ERROR_FILE) {
-				printf("<P><DIV CLASS='errorMessage'>Error: Cannot open log file '%s' for reading!</DIV></P>", log_file_to_use);
+				printf("<P><DIV CLASS='errorMessage'>错误:无法打开日志文件 '%s'!</DIV></P>", log_file_to_use);
 				return;
 				}
 			use_lifo = FALSE;
@@ -483,7 +483,7 @@ void display_notifications(void) {
 	if(use_lifo == FALSE) {
 
 		if((thefile = mmap_fopen(log_file_to_use)) == NULL) {
-			printf("<P><DIV CLASS='errorMessage'>Error: Cannot open log file '%s' for reading!</DIV></P>", log_file_to_use);
+			printf("<P><DIV CLASS='errorMessage'>错误:无法打开日志文件 '%s'!</DIV></P>", log_file_to_use);
 			return;
 			}
 		}
@@ -493,13 +493,13 @@ void display_notifications(void) {
 
 	printf("<table border=0 CLASS='notifications'>\n");
 	printf("<tr>\n");
-	printf("<th CLASS='notifications'>Host</th>\n");
-	printf("<th CLASS='notifications'>Service</th>\n");
-	printf("<th CLASS='notifications'>Type</th>\n");
-	printf("<th CLASS='notifications'>Time</th>\n");
-	printf("<th CLASS='notifications'>Contact</th>\n");
-	printf("<th CLASS='notifications'>Notification Command</th>\n");
-	printf("<th CLASS='notifications'>Information</th>\n");
+	printf("<th CLASS='notifications'>主机</th>\n");
+	printf("<th CLASS='notifications'>服务</th>\n");
+	printf("<th CLASS='notifications'>类型</th>\n");
+	printf("<th CLASS='notifications'>时间</th>\n");
+	printf("<th CLASS='notifications'>联系人</th>\n");
+	printf("<th CLASS='notifications'>通知命令</th>\n");
+	printf("<th CLASS='notifications'>信息</th>\n");
 	printf("</tr>\n");
 
 	total_notifications = 0;
@@ -567,7 +567,7 @@ void display_notifications(void) {
 					strcpy(alert_level_class, "WARNING");
 					}
 				else if(!strcmp(alert_level, "RECOVERY") || !strcmp(alert_level, "OK")) {
-					strcpy(alert_level, "OK");
+					strcpy(alert_level, "正常");
 					notification_detail_type = NOTIFICATION_SERVICE_RECOVERY;
 					strcpy(alert_level_class, "OK");
 					}
@@ -580,12 +580,12 @@ void display_notifications(void) {
 					strcpy(alert_level_class, "ACKNOWLEDGEMENT");
 					}
 				else if(strstr(alert_level, "FLAPPINGSTART (")) {
-					strcpy(alert_level, "FLAPPING START");
+					strcpy(alert_level, "抖动开始");
 					notification_detail_type = NOTIFICATION_SERVICE_FLAP;
 					strcpy(alert_level_class, "UNKNOWN");
 					}
 				else if(strstr(alert_level, "FLAPPINGSTOP (")) {
-					strcpy(alert_level, "FLAPPING STOP");
+					strcpy(alert_level, "抖动停止");
 					notification_detail_type = NOTIFICATION_SERVICE_FLAP;
 					strcpy(alert_level_class, "UNKNOWN");
 					}
@@ -594,7 +594,7 @@ void display_notifications(void) {
 					strcpy(alert_level_class, "DOWNTIME");
 					}
 				else {
-					strcpy(alert_level, "UNKNOWN");
+					strcpy(alert_level, "未知");
 					notification_detail_type = NOTIFICATION_SERVICE_UNKNOWN;
 					strcpy(alert_level_class, "UNKNOWN");
 					}
@@ -603,17 +603,17 @@ void display_notifications(void) {
 			else {
 
 				if(!strcmp(alert_level, "DOWN")) {
-					strncpy(alert_level, "HOST DOWN", sizeof(alert_level));
+					strncpy(alert_level, "主机的宕机状态", sizeof(alert_level));
 					strcpy(alert_level_class, "HOSTDOWN");
 					notification_detail_type = NOTIFICATION_HOST_DOWN;
 					}
 				else if(!strcmp(alert_level, "UNREACHABLE")) {
-					strncpy(alert_level, "HOST UNREACHABLE", sizeof(alert_level));
+					strncpy(alert_level, "主机的不可达状态", sizeof(alert_level));
 					strcpy(alert_level_class, "HOSTUNREACHABLE");
 					notification_detail_type = NOTIFICATION_HOST_UNREACHABLE;
 					}
 				else if(!strcmp(alert_level, "RECOVERY") || !strcmp(alert_level, "UP")) {
-					strncpy(alert_level, "HOST UP", sizeof(alert_level));
+					strncpy(alert_level, "主机的运行状态", sizeof(alert_level));
 					strcpy(alert_level_class, "HOSTUP");
 					notification_detail_type = NOTIFICATION_HOST_RECOVERY;
 					}
@@ -626,12 +626,12 @@ void display_notifications(void) {
 					notification_detail_type = NOTIFICATION_HOST_ACK;
 					}
 				else if(strstr(alert_level, "FLAPPINGSTART (")) {
-					strcpy(alert_level, "FLAPPING START");
+					strcpy(alert_level, "抖动开始");
 					strcpy(alert_level_class, "UNKNOWN");
 					notification_detail_type = NOTIFICATION_HOST_FLAP;
 					}
 				else if(strstr(alert_level, "FLAPPINGSTOP (")) {
-					strcpy(alert_level, "FLAPPING STOP");
+					strcpy(alert_level, "抖动停止");
 					strcpy(alert_level_class, "UNKNOWN");
 					notification_detail_type = NOTIFICATION_HOST_FLAP;
 					}
@@ -732,16 +732,16 @@ void display_notifications(void) {
 	printf("</p>\n");
 
 	if(total_notifications == 0) {
-		printf("<P><DIV CLASS='errorMessage'>No notifications have been recorded");
+		printf("<P><DIV CLASS='errorMessage'>");
 		if(find_all == FALSE) {
 			if(query_type == FIND_SERVICE)
-				printf(" for this service");
+				printf("该服务的");
 			else if(query_type == FIND_CONTACT)
-				printf(" for this contact");
+				printf("该联系人的");
 			else
-				printf(" for this host");
+				printf("该主机的");
 			}
-		printf(" in %s log file</DIV></P>", (log_archive == 0) ? "the current" : "this archived");
+		printf("在%s的日志文件中没有通知记录</DIV></P>", (log_archive == 0) ? "当前" : "该归档");
 		}
 
 	free(input);
