@@ -25,6 +25,10 @@
  *
  *****************************************************************************/
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+	
 #include "../include/config.h"
 #include "../include/common.h"
 #include "../include/objects.h"
@@ -51,6 +55,7 @@ extern char main_config_file[MAX_FILENAME_LENGTH];
 extern char url_html_path[MAX_FILENAME_LENGTH];
 extern char physical_images_path[MAX_FILENAME_LENGTH];
 extern char url_images_path[MAX_FILENAME_LENGTH];
+extern char url_js_path[MAX_FILENAME_LENGTH];
 extern char url_logo_images_path[MAX_FILENAME_LENGTH];
 extern char url_stylesheets_path[MAX_FILENAME_LENGTH];
 extern char *status_file;
@@ -89,6 +94,7 @@ extern int default_statusmap_layout_method;
 #define LAYOUT_CIRCULAR                 4
 #define LAYOUT_CIRCULAR_MARKUP          5
 #define LAYOUT_CIRCULAR_BALLOON         6
+#define LAYOUT_GOOGLEMAP                7
 
 
 struct layer {
@@ -96,6 +102,21 @@ struct layer {
 	struct layer *next;
 };
 
+struct location_t {
+	char* name;
+	char* address;
+	char* note;
+	char* latitude;
+	char* longitude;
+	struct location_t* next;
+};
+
+struct general_location_t {
+	char* key;
+	char* zoom;
+	char* latitude;
+	char* longitude;
+};
 
 void document_header(int);
 void document_footer(void);
@@ -113,6 +134,10 @@ void load_background_image(void);
 void draw_background_image(void);
 void draw_background_extras(void);
 void draw_host_links(void);
+
+void google_map(void);
+void write_google_head_code(void);
+
 void draw_hosts(void);
 void draw_host_text(char *, int, int);
 void draw_text(char *, int, int, int);
@@ -288,10 +313,10 @@ int main(int argc, char **argv) {
 	init_macros();
 
 
-	document_header(TRUE);
-
 	/* get authentication information */
 	get_authentication_information(&current_authdata);
+	
+	document_header(TRUE);
 
 	/* display the network map... */
 	display_map();
@@ -344,9 +369,10 @@ void document_header(int use_stylesheet) {
 
 		/* write JavaScript code for popup window */
 		write_popup_code();
+		if (layout_method == LAYOUT_GOOGLEMAP)
+			write_google_head_code();
 
 		printf("</head>\n");
-
 		printf("<body CLASS='statusmap' name='mappage' id='mappage'>\n");
 
 		/* include user SSI header */
@@ -701,7 +727,7 @@ void display_page_header(void) {
 		/* right hand column of top row */
 		printf("<td align=right valign=top>\n");
 
-		printf("<form method=\"POST\" action=\"%s\">\n", STATUSMAP_CGI);
+		printf("<form name=\"layoutform\" method=\"POST\" action=\"%s\">\n",STATUSMAP_CGI);
 		printf("<table border=0 CLASS='optBox'>\n");
 		printf("<tr><td valign=top>\n");
 		printf("<input type='hidden' name='host' value='%s'>\n", escape_string(host_name));
@@ -723,6 +749,7 @@ void display_page_header(void) {
 		printf("<option value=%d %s>Circular\n", LAYOUT_CIRCULAR, (layout_method == LAYOUT_CIRCULAR) ? "selected" : "");
 		printf("<option value=%d %s>Circular (Marked Up)\n", LAYOUT_CIRCULAR_MARKUP, (layout_method == LAYOUT_CIRCULAR_MARKUP) ? "selected" : "");
 		printf("<option value=%d %s>Circular (Balloon)\n", LAYOUT_CIRCULAR_BALLOON, (layout_method == LAYOUT_CIRCULAR_BALLOON) ? "selected" : "");
+		printf("<option value=%d %s>GoogleMap\n", LAYOUT_GOOGLEMAP, (layout_method == LAYOUT_GOOGLEMAP) ? "selected" : "");
 		printf("</select>\n");
 		printf("</td>\n");
 		printf("<td CLASS='optBoxItem'>\n");
@@ -818,6 +845,11 @@ void display_map(void) {
 
 	/* display page header */
 	display_page_header();
+	
+	if (layout_method==LAYOUT_GOOGLEMAP){
+		google_map();
+		return;
+	}
 
 	initialize_graphics();
 	draw_background_image();
@@ -1562,9 +1594,21 @@ void draw_host_links(void) {
 	}
 
 
+/* create the googlemap */
+void google_map(void){
+	
+	printf("\n");
+	printf("<P><DIV ALIGN=center>");
+	printf("<div id='map-canvas' style='width: 800px; height: 500px'></div>");
+	printf("</DIV></P>");
+	printf("\n");
+	
+	}
+
 
 /* draws hosts */
 void draw_hosts(void) {
+	
 	host *temp_host;
 	int x1, x2;
 	int y1;
@@ -1583,6 +1627,9 @@ void draw_hosts(void) {
 	time_t current_time;
 	int translated_x;
 	int translated_y;
+	
+	if (layout_method == LAYOUT_GOOGLEMAP)
+		return;
 
 
 	/* user didn't supply any coordinates for hosts, so display a warning */
@@ -2236,6 +2283,199 @@ void cleanup_graphics(void) {
 /******************************************************************/
 /************************* MISC FUNCTIONS *************************/
 /******************************************************************/
+
+
+char* get_status_code(char* name) {
+	char* retVal;
+	hoststatus *temp_status;
+	temp_status=find_hoststatus(name);
+
+	/* strip nasty stuff from plugin output */
+	sanitize_plugin_output(temp_status->plugin_output);
+	
+	retVal=malloc(1000);
+	retVal[0]=0;
+	if(temp_status->status==HOST_DOWN){
+		strcat(retVal,"Down");
+		if(temp_status->problem_has_been_acknowledged==TRUE)
+			strcat(retVal," (Acknowledged)");
+		strcat(retVal, "");
+	        }
+
+	else if(temp_status->status==HOST_UNREACHABLE){
+		strcat(retVal, "Unreachable");
+		if(temp_status->problem_has_been_acknowledged==TRUE)
+			strcat(retVal, " (Acknowledged)");
+		strcat(retVal, "");
+	        }
+
+	else if(temp_status->status==HOST_UP)
+		strcat(retVal, "Up");
+
+	else if(temp_status->status==HOST_PENDING)
+		strcat(retVal, "Pending");
+	return retVal;
+	}
+
+void write_google_head_code(void) {
+	char ch;
+	char* ptr;
+	int rc;
+	FILE *fp;
+	char stateinfo[1024];	
+	char line[1024];	
+	char key[1024];	
+	char value[1024];	
+	char buf[256];
+	char* filename;
+	int state = 0;
+	int counter = 0;
+	struct general_location_t gen_loc;
+	struct location_t* loc;
+	struct location_t* loc_list=NULL;
+
+
+/***************************************
+ * parse location.cfg
+ **************************************/
+
+	filename = "/etc/nagios/objects/location.cfg";
+	if((fp=fopen(filename, "r"))==NULL) {
+		char* err_mess = "The file: location.cfg does not exist or could not be read!";	
+		printf("<p>");
+		printf("<font color=\"red\">%s</font>\r\n",err_mess);
+		printf("</p>");
+		return;
+		}
+
+	while(fgets(buf, sizeof(buf), fp)!=NULL) {
+		if ( (state == 1) && (buf[0] == '}')) {
+			// we have reached a definition end
+			state = 0;
+			counter++;
+			if (loc_list) {
+				loc->next = loc_list;
+				loc_list = loc;
+			} else {
+				loc_list = loc;
+				}
+			loc = NULL;
+			continue;
+			}	
+		if ( (state==2) && (buf[0] == '}')) {
+			state=0;
+			}
+		key[0] = value[0] = 0;
+		if (isspace(buf[0]))
+			rc = sscanf(buf, "%*[ \t]%[^ \t]%*[ \t]%[^\n]", key, value);
+		else
+			rc = sscanf(buf, "%[^ \t]%*[ \t]%[^\n]", key, value);
+
+		if ( (rc == 2)) {
+			if ( (state == 0) &&  (strcmp(key,"define")==0) ) {
+				// we have a start of a new definition
+
+				// check if it is the default definition
+				if ( (strncmp(value,"default ",8)==0) ||
+						(strncmp(value,"default{",8)==0)) {
+					state=2;
+					continue;
+					}
+				state = 1;
+				// declare a new location
+				loc = calloc(1,sizeof(*loc));
+				continue;
+				}
+			// state 2 == default definition
+			if ( state == 2 ) {
+				if ( strcmp(key,"key") == 0) {
+					gen_loc.key=strdup(value);
+					}
+				if ( strcmp(key,"zoom") == 0) {
+					gen_loc.zoom=strdup(value);
+					}
+				if ( strcmp(key,"lat") == 0) {
+					gen_loc.latitude=strdup(value);
+					}
+				if ( strcmp(key,"long") == 0) {
+					gen_loc.longitude=strdup(value);
+					}
+				}
+			// state 1 == location definition
+			if ( state == 1 ) {
+				if ( strcmp(key,"host_name") == 0) {
+					loc->name=strdup(value);
+					}
+				if ( strcmp(key,"notes") == 0) {
+					loc->note = strdup(value);
+					}
+				if ( strcmp(key,"address") == 0) {
+					loc->address = strdup(value);
+					}
+				if ( strcmp(key,"lat") == 0) {
+					loc->latitude = strdup(value);
+					}
+				if ( strcmp(key,"long") == 0) {
+					loc->longitude = strdup(value);
+					}
+				}
+			}
+		}
+	fclose(fp);
+
+
+	printf("<script type='text/javascript'>\n");
+	printf("gstatusmap = {\n");
+	printf("lat:%s,\n", gen_loc.latitude);
+	printf("lng:%s,\n", gen_loc.longitude);
+	if (user_supplied_scaling==TRUE) {
+		printf("scale: '%2.1f',\n", user_scaling_factor);
+	} else {
+		user_scaling_factor = atof(gen_loc.zoom);
+		printf("scale: '%2.1f',\n", user_scaling_factor);
+		}
+	printf("markers: [\n");
+
+	loc = loc_list;
+	while (loc) {
+		// check if allowed to show hostname first
+		host* temp_host=find_host(loc->name);
+		int in_layer_list=FALSE;
+		in_layer_list=is_host_in_layer_list(temp_host);
+
+		if ( !is_authorized_for_host(temp_host,&current_authdata) && !is_host_in_layer_list(temp_host)) {
+			loc = loc->next;	
+			continue;
+		} else {
+			if((in_layer_list==TRUE && exclude_layers==TRUE) || (in_layer_list==FALSE && exclude_layers==FALSE)) {
+				loc = loc->next;	
+				continue;
+				}
+			ptr = get_status_code(loc->name);	
+			strcpy(stateinfo,ptr);
+			free(ptr);
+
+	
+			printf("['%s','",loc->name);
+			ptr = loc->note;
+			while ((ch = *ptr++)) {
+				if (ch == '\'') printf("\\'");
+				else printf("%c", ch);
+				}
+			printf("','%s',%s,%s,'%s'],\n",loc->address,loc->latitude,loc->longitude,stateinfo);
+
+			loc = loc->next;
+			}
+		}
+
+	printf("0], \n");
+	printf("images_url: '%s'\n", url_images_path);
+	printf("};\n");
+	printf("</script>\n");
+
+	printf("<script src='http://maps.googleapis.com/maps/api/js?key=%s' type='text/javascript'></script>\n",gen_loc.key);
+	printf("<script src='%sgooglemap.js' type='text/javascript'></script>\n", url_js_path);
+	}
 
 
 /* write JavaScript code an layer for popup window */

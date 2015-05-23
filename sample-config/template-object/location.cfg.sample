@@ -1,0 +1,22 @@
+define default {
+ key google_api_key
+ zoom 7.1
+ lat 14.21048
+ long 101.97577
+}
+
+define location {
+ host_name localhost
+ address 127.0.0.1
+ notes Nagios
+ lat 12.5167
+ long 102.0000
+}
+
+define location {
+ host_name localhost2
+ address 127.0.0.2
+ notes Nagios2
+ lat 14.5167
+ long 142.0000
+}
