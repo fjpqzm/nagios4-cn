@@ -1,14 +1,14 @@
-Nagios4.x¼à¿ØÏîÄ¿ÖĞÎÄ°æ</br>
-°æ±¾ v1.0</br>
-´ó²¿·Ö·­ÒëÈ¡×Ônagios-cn( http://sourceforge.net/projects/nagios-cn/ )ÏîÄ¿£¬ĞŞÕıÁË²¿·Öºº»¯</br>
-ºº»¯¹¤×÷ÒÑ¾­»ù±¾Íê³É£¬cgi/*json.c²¿·ÖÎÄ¼şÎ´ºº»¯£¬nagiosÊı¾İjson¸ñÊ½»¯Óë»ù±¾Ê¹ÓÃÎŞ°­</br>
-Èç·¢ÏÖÈÎºÎÎÊÌâ»òĞŞ¸Ä½¨ÒéÇëÁªÏµ imniuba(AT)gmail.com</br>
-À©Õ¹²¹¶¡ÁĞ±í:</br>
->nagios-cgi-http_charset.patch, ÔÚcgi.cfgÖĞÌí¼Óhttp_charset²ÎÊı£¬ÓÃÓÚÖ¸¶¨httpµÄ×Ö·û±àÂë¸ñÊ½£¬Ä¬ÈÏutf8</br>
->nagios-googlemap.patch, ÔÚstatusmap.cÖĞÌí¼ÓgoogleµØÍ¼À©Õ¹</br>
->nagios-disabled-query_update.patch, ¹Ø±ÕÁË×Ô¶¯¼ì²âÉı¼¶</br>
->nagios-archivelog-timeformat.patch, ĞŞÕı¹éµµÈÕÖ¾ÎÄ¼şÃüÃû¸ñÊ½"nagios-%04d-%02d-%02d-%02d.log"</br>
->nagios-output-length.patch, Ìá¸ßÁËÀ©Õ¹ÃüÁî¡¢²å¼şµÄ×î´óÊä³ö×Ö·û³¤¶È</br>
+Nagios4.xç›‘æ§é¡¹ç›®ä¸­æ–‡ç‰ˆ
+ç‰ˆæœ¬ v1.0
+å¤§éƒ¨åˆ†ç¿»è¯‘å–è‡ªnagios-cn( http://sourceforge.net/projects/nagios-cn/ )é¡¹ç›®ï¼Œä¿®æ­£äº†éƒ¨åˆ†æ±‰åŒ–
+æ±‰åŒ–å·¥ä½œå·²ç»åŸºæœ¬å®Œæˆï¼Œcgi/*json.céƒ¨åˆ†æ–‡ä»¶æœªæ±‰åŒ–ï¼Œnagiosæ•°æ®jsonæ ¼å¼åŒ–ä¸åŸºæœ¬ä½¿ç”¨æ— ç¢
+å¦‚å‘ç°ä»»ä½•é—®é¢˜æˆ–ä¿®æ”¹å»ºè®®è¯·è”ç³» imniuba(AT)gmail.com
+æ‰©å±•è¡¥ä¸åˆ—è¡¨:
+	nagios-cgi-http_charset.patch, åœ¨cgi.cfgä¸­æ·»åŠ http_charsetå‚æ•°ï¼Œç”¨äºæŒ‡å®šhttpçš„å­—ç¬¦ç¼–ç æ ¼å¼ï¼Œé»˜è®¤utf8
+	nagios-googlemap.patch, åœ¨statusmap.cä¸­æ·»åŠ googleåœ°å›¾æ‰©å±•
+	nagios-disabled-query_update.patch, å…³é—­äº†è‡ªåŠ¨æ£€æµ‹å‡çº§
+	nagios-archivelog-timeformat.patch, ä¿®æ­£å½’æ¡£æ—¥å¿—æ–‡ä»¶å‘½åæ ¼å¼"nagios-%04d-%02d-%02d-%02d.log"
+	nagios-output-length.patch, æé«˜äº†æ‰©å±•å‘½ä»¤ã€æ’ä»¶çš„æœ€å¤§è¾“å‡ºå­—ç¬¦é•¿åº¦
 
 
 Nagios 4.x README
