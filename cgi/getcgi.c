@@ -95,6 +95,9 @@ void unescape_cgi_input(char *input) {
 			break;
 		else if(input[x] == '%') {
 			input[y] = hex_to_char(&input[x + 1]);
+                        if (input[y] == '+') {
+                          input[y] = ' ';
+                          }
 			x += 2;
 			}
 		else
