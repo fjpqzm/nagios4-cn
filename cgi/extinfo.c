@@ -57,7 +57,7 @@ extern hoststatus *hoststatus_list;
 extern servicestatus *servicestatus_list;
 
 
-#define MAX_MESSAGE_BUFFER		4096
+#define MAX_MESSAGE_BUFFER		40960
 
 #define HEALTH_WARNING_PERCENTAGE       85
 #define HEALTH_CRITICAL_PERCENTAGE      75

@@ -64,7 +64,7 @@ extern servicestatus *servicestatus_list;
 
 static nagios_macros *mac;
 
-#define MAX_MESSAGE_BUFFER		4096
+#define MAX_MESSAGE_BUFFER		40960
 
 #define DISPLAY_HOSTS			0
 #define DISPLAY_HOSTGROUPS		1

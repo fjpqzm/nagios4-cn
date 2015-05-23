@@ -268,7 +268,7 @@ extern struct load_control loadctl;
 	   of MAX_EXTERNAL_COMMAND_LENGTH in common.h to allow for passive checks results received through the external
 	   command file. EG 10/19/07
 	*/
-#define MAX_PLUGIN_OUTPUT_LENGTH                8192    /* max length of plugin output (including perf data) */
+#define MAX_PLUGIN_OUTPUT_LENGTH                81920    /* max length of plugin output (including perf data) */
 
 
 	/******************* STATE LOGGING TYPES **************/
